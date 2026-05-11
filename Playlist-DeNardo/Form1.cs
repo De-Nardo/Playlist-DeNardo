@@ -1,5 +1,7 @@
+using NAudio.Wave;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Windows.Forms;
 
 namespace Playlist_DeNardo
 {
@@ -7,6 +9,8 @@ namespace Playlist_DeNardo
     {
         List<Canzone> Playlist = new List<Canzone>();
         string percorsoJson = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PlaylistApp", "Playlist.json");
+        WaveOutEvent outputDevice = new WaveOutEvent();
+        AudioFileReader audioFile;
         class Canzone
         {
             public string Titolo { get; set; }
@@ -99,7 +103,7 @@ namespace Playlist_DeNardo
             }
             else
             {
-                MessageBox.Show("Attenzione, seleziona  una canzone prima di salvare.");
+                MessageBox.Show("Attenzione, seleziona una canzone prima di salvare.");
             }
         }
 
@@ -127,6 +131,73 @@ namespace Playlist_DeNardo
             {
                 Brani.Items.Add($"{c.Titolo}, {c.Autore}");
             }
+        }
+
+        private void Sfoglia_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog file = new OpenFileDialog();
+            file.Filter = "*.mp3|*.jpg|*.png|*.jpg| Tutti i file (*.*) |*.*";
+            if (file.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show($"File selezionato: {file.FileName}");
+                string percorsoOriginale = file.FileName;
+                string nomeFile = Path.GetFileName(percorsoOriginale);
+                string cartellaDestinazione = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PlaylistApp", "Musica");
+                if (!Directory.Exists(cartellaDestinazione))
+                {
+                    Directory.CreateDirectory(cartellaDestinazione);
+                }
+                string percorsoFinale = Path.Combine(cartellaDestinazione, nomeFile);
+                try
+                {
+                    File.Copy(percorsoOriginale, percorsoFinale, true);
+                    txtTitolo.Text = Path.GetFileNameWithoutExtension(nomeFile);
+                    MessageBox.Show("File caricato correttamente.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Errore durante la copia del file:{ex.Message}");
+                }
+
+            }
+        }
+        private void Play_Click(object sender, EventArgs e)
+        {
+            if (outputDevice.PlaybackState == PlaybackState.Playing)
+            {
+            }
+            else
+            {
+                if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PlaylistApp", "Musica", $"{txtTitolo.Text}.mp3")))
+                {
+                    audioFile = new AudioFileReader(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PlaylistApp", "Musica", $"{txtTitolo.Text}.mp3"));
+                    outputDevice.Init(audioFile);
+                    outputDevice.Play();
+                }
+                else
+                {
+                    MessageBox.Show("File non trovato. Assicurati di aver caricato un file mp3 valido.");
+                }
+            }
+        }
+
+        private void Pause_Click(object sender, EventArgs e)
+        {
+            if (outputDevice.PlaybackState == PlaybackState.Playing)
+            {
+                outputDevice.Pause();
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            outputDevice?.Stop();
+            outputDevice?.Dispose();
+            audioFile?.Dispose();
         }
     }
 }
