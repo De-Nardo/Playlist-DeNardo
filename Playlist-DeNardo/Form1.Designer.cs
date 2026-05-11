@@ -1,4 +1,4 @@
-﻿namespace Playlist_DeNardo
+namespace Playlist_DeNardo
 {
     partial class Form1
     {
@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             Brani = new ListBox();
             label1 = new Label();
             progressBar = new ProgressBar();
@@ -47,6 +48,10 @@
             Volume = new TrackBar();
             Immagine = new PictureBox();
             txtCerca = new TextBox();
+            Play = new Button();
+            Pause = new Button();
+            Stop = new Button();
+            Mute = new Button();
             ((System.ComponentModel.ISupportInitialize)Volume).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Immagine).BeginInit();
             SuspendLayout();
@@ -80,7 +85,7 @@
             progressBar.BackColor = Color.Silver;
             progressBar.Location = new Point(40, 256);
             progressBar.Name = "progressBar";
-            progressBar.Size = new Size(225, 23);
+            progressBar.Size = new Size(237, 23);
             progressBar.TabIndex = 2;
             // 
             // txtDurata
@@ -106,6 +111,10 @@
             txtTitolo.Name = "txtTitolo";
             txtTitolo.Size = new Size(100, 23);
             txtTitolo.TabIndex = 5;
+            // 
+            // timer1
+            // 
+            timer1.Tick += timer1_Tick;
             // 
             // label2
             // 
@@ -188,6 +197,7 @@
             Sfoglia.TabIndex = 13;
             Sfoglia.Text = "Sfoglia";
             Sfoglia.UseVisualStyleBackColor = false;
+            Sfoglia.Click += Sfoglia_Click;
             // 
             // label5
             // 
@@ -210,7 +220,7 @@
             // Immagine
             // 
             Immagine.BackColor = Color.Transparent;
-            Immagine.Image = Properties.Resources.playlist;
+            Immagine.Image = (Image)resources.GetObject("Immagine.Image");
             Immagine.Location = new Point(328, 68);
             Immagine.Name = "Immagine";
             Immagine.Size = new Size(182, 182);
@@ -227,12 +237,58 @@
             txtCerca.TabIndex = 17;
             txtCerca.TextChanged += txtCerca_TextChanged;
             // 
+            // Play
+            // 
+            Play.BackColor = Color.FromArgb(0, 192, 0);
+            Play.Location = new Point(40, 215);
+            Play.Name = "Play";
+            Play.Size = new Size(75, 23);
+            Play.TabIndex = 18;
+            Play.Text = "Play";
+            Play.UseVisualStyleBackColor = false;
+            Play.Click += Play_Click;
+            // 
+            // Pause
+            // 
+            Pause.BackColor = Color.FromArgb(0, 192, 0);
+            Pause.Location = new Point(121, 215);
+            Pause.Name = "Pause";
+            Pause.Size = new Size(75, 23);
+            Pause.TabIndex = 19;
+            Pause.Text = "Pause";
+            Pause.UseVisualStyleBackColor = false;
+            Pause.Click += Pause_Click;
+            // 
+            // Stop
+            // 
+            Stop.BackColor = Color.FromArgb(0, 192, 0);
+            Stop.Location = new Point(202, 215);
+            Stop.Name = "Stop";
+            Stop.Size = new Size(75, 23);
+            Stop.TabIndex = 20;
+            Stop.Text = "Stop";
+            Stop.UseVisualStyleBackColor = false;
+            // 
+            // Mute
+            // 
+            Mute.BackColor = Color.FromArgb(0, 192, 0);
+            Mute.Location = new Point(461, 256);
+            Mute.Name = "Mute";
+            Mute.Size = new Size(49, 23);
+            Mute.TabIndex = 21;
+            Mute.Text = "Mute";
+            Mute.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gray;
             ClientSize = new Size(800, 305);
+            Controls.Add(Mute);
+            Controls.Add(Stop);
+            Controls.Add(Pause);
+            Controls.Add(Play);
             Controls.Add(txtCerca);
             Controls.Add(Immagine);
             Controls.Add(Volume);
@@ -278,5 +334,9 @@
         private TrackBar Volume;
         private PictureBox Immagine;
         private TextBox txtCerca;
+        private Button Play;
+        private Button Pause;
+        private Button Stop;
+        private Button Mute;
     }
 }
